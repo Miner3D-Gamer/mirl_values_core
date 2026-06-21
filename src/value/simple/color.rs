@@ -1,5 +1,4 @@
-
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
+#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// A color
 pub enum Color {

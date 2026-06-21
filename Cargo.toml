@@ -2,7 +2,6 @@
 name = "mirl_values_core"
 version = "0.0.0-alpha"
 edition.workspace = true
-readme.workspace = true
 repository.workspace = true
 license.workspace = true
 authors.workspace = true
@@ -27,7 +26,7 @@ indexmap = { version = "1.0", optional = true }
 
 # Support
 toml = { version = "1.1", optional = true }
-# lightningcss = { version = "1.0.0-alpha.71", optional = true }
+# lightningcss = { version = "1.0-alpha.71", optional = true }
 
 
 mirl_derive = { version = "0.0.0-alpha", optional = true }
@@ -39,7 +38,7 @@ serde = { version = ">=1.0", optional = true, default-features = false, features
 bitcode = { version = "0.6.9", optional = true, default-features = false, features = [
     "derive",
 ] }
-wincode = { version = "0.4.5", optional = true, default-features = false, features = [
+wincode = { version = "0.5.3", optional = true, features = [
     "derive",
 ] }
 zerocopy = { version = "0.8.48", optional = true, default-features = false, features = [
@@ -51,7 +50,7 @@ zerocopy = { version = "0.8.48", optional = true, default-features = false, feat
 strum = { version = ">=0.28", optional = true, default-features = false, features = [
     "derive",
 ] }
-enum_ext = { version = "0.5.2", optional = true, default-features = false }
+enum_ext = { version = "0.6.0", optional = true, default-features = false }
 
 
 

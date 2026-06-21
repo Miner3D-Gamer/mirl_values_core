@@ -1,7 +1,6 @@
 use crate::{settings::MapType, value::ValueType};
 
-
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
+#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
 /// Container variants that hold inner values of type `V`
 #[derive(Debug, Clone)]
 pub enum ContainerValue<Value> {

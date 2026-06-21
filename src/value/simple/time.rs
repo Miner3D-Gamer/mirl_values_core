@@ -10,7 +10,7 @@ pub struct Date {
     pub day: u8,
 }
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
+#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
 /// A specific point in time (optionally offset by timezone)
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Datetime {
@@ -25,7 +25,7 @@ pub struct Datetime {
     pub minute_offset: i16,
 }
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
+#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// Time that is less that 24 hours
 pub struct Time {
