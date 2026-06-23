@@ -1,4 +1,4 @@
-use std::{hint::unreachable_unchecked, str::FromStr};
+use std::str::FromStr;
 
 // use mirl_extensions::*;
 
@@ -56,12 +56,8 @@ impl core::ops::Add for Number {
     fn add(self, rhs: Self) -> Self::Output {
         match (self, rhs) {
             (Self::Int(v1), Self::Int(v2)) => Self::Int(v1 + v2),
-            (Self::BigInt(v1), Self::Int(v2)) => {
-                Self::BigInt(v1 + num_bigint::BigInt::from(v2))
-            }
-            (Self::Int(v1), Self::BigInt(v2)) => {
-                Self::BigInt(v2 + num_bigint::BigInt::from(v1))
-            }
+            (Self::BigInt(v1), Self::Int(v2)) => Self::BigInt(v1 + num_bigint::BigInt::from(v2)),
+            (Self::Int(v1), Self::BigInt(v2)) => Self::BigInt(v2 + num_bigint::BigInt::from(v1)),
             (Self::BigInt(v1), Self::BigInt(v2)) => Self::BigInt(v1 + v2),
             (Self::Int(v1), Self::Float(v2)) => Self::Float((v1 as f64) + (v2)),
             (Self::Float(v1), Self::Int(v2)) => Self::Float((v2 as f64) + (v1)),
@@ -75,21 +71,17 @@ impl core::ops::Add for Number {
             (Self::Float(v1), Self::BigFloat(v2)) => {
                 Self::BigFloat(num_bigfloat::BigFloat::from_f64(v1) + (v2))
             }
-            (Self::Float(v1), Self::BigInt(v2)) => Self::BigFloat(
-                num_bigfloat::BigFloat::from_f64(v1) + bigint_to_bigfloat(&v2),
-            ),
-            (Self::BigInt(v1), Self::Float(v2)) => Self::BigFloat(
-                num_bigfloat::BigFloat::from_f64(v2) + bigint_to_bigfloat(&v1),
-            ),
-            (Self::BigInt(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(v2 + bigint_to_bigfloat(&v1))
+            (Self::Float(v1), Self::BigInt(v2)) => {
+                Self::BigFloat(num_bigfloat::BigFloat::from_f64(v1) + bigint_to_bigfloat(&v2))
             }
+            (Self::BigInt(v1), Self::Float(v2)) => {
+                Self::BigFloat(num_bigfloat::BigFloat::from_f64(v2) + bigint_to_bigfloat(&v1))
+            }
+            (Self::BigInt(v1), Self::BigFloat(v2)) => Self::BigFloat(v2 + bigint_to_bigfloat(&v1)),
             (Self::BigFloat(v1), Self::Float(v2)) => {
                 Self::BigFloat(num_bigfloat::BigFloat::from_f64(v2) + (v1))
             }
-            (Self::BigFloat(v1), Self::BigInt(v2)) => {
-                Self::BigFloat(v1 + bigint_to_bigfloat(&v2))
-            }
+            (Self::BigFloat(v1), Self::BigInt(v2)) => Self::BigFloat(v1 + bigint_to_bigfloat(&v2)),
             (Self::BigFloat(v1), Self::BigFloat(v2)) => Self::BigFloat(v1 + v2),
         }
     }
@@ -199,40 +191,24 @@ impl core::ops::Sub for Number {
     fn sub(self, rhs: Self) -> Self::Output {
         match (self, rhs) {
             (Self::Int(v1), Self::Int(v2)) => Self::Int(v1 - v2),
-            (Self::BigInt(v1), Self::Int(v2)) => {
-                Self::BigInt(v1 - BigInt::from(v2))
-            }
-            (Self::Int(v1), Self::BigInt(v2)) => {
-                Self::BigInt(BigInt::from(v1) - v2)
-            }
+            (Self::BigInt(v1), Self::Int(v2)) => Self::BigInt(v1 - BigInt::from(v2)),
+            (Self::Int(v1), Self::BigInt(v2)) => Self::BigInt(BigInt::from(v1) - v2),
             (Self::BigInt(v1), Self::BigInt(v2)) => Self::BigInt(v1 - v2),
             (Self::Int(v1), Self::Float(v2)) => Self::Float((v1 as f64) - v2),
             (Self::Float(v1), Self::Int(v2)) => Self::Float(v1 - (v2 as f64)),
-            (Self::Int(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(BigFloat::from_i128(v1) - v2)
-            }
-            (Self::BigFloat(v1), Self::Int(v2)) => {
-                Self::BigFloat(v1 - BigFloat::from_i128(v2))
-            }
+            (Self::Int(v1), Self::BigFloat(v2)) => Self::BigFloat(BigFloat::from_i128(v1) - v2),
+            (Self::BigFloat(v1), Self::Int(v2)) => Self::BigFloat(v1 - BigFloat::from_i128(v2)),
             (Self::Float(v1), Self::Float(v2)) => Self::Float(v1 - v2),
-            (Self::Float(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(BigFloat::from_f64(v1) - v2)
-            }
-            (Self::BigFloat(v1), Self::Float(v2)) => {
-                Self::BigFloat(v1 - BigFloat::from_f64(v2))
-            }
+            (Self::Float(v1), Self::BigFloat(v2)) => Self::BigFloat(BigFloat::from_f64(v1) - v2),
+            (Self::BigFloat(v1), Self::Float(v2)) => Self::BigFloat(v1 - BigFloat::from_f64(v2)),
             (Self::Float(v1), Self::BigInt(v2)) => {
                 Self::BigFloat(BigFloat::from_f64(v1) - bigint_to_bigfloat(&v2))
             }
             (Self::BigInt(v1), Self::Float(v2)) => {
                 Self::BigFloat(bigint_to_bigfloat(&v1) - BigFloat::from_f64(v2))
             }
-            (Self::BigInt(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(bigint_to_bigfloat(&v1) - v2)
-            }
-            (Self::BigFloat(v1), Self::BigInt(v2)) => {
-                Self::BigFloat(v1 - bigint_to_bigfloat(&v2))
-            }
+            (Self::BigInt(v1), Self::BigFloat(v2)) => Self::BigFloat(bigint_to_bigfloat(&v1) - v2),
+            (Self::BigFloat(v1), Self::BigInt(v2)) => Self::BigFloat(v1 - bigint_to_bigfloat(&v2)),
             (Self::BigFloat(v1), Self::BigFloat(v2)) => Self::BigFloat(v1 - v2),
         }
     }
@@ -243,40 +219,24 @@ impl core::ops::Mul for Number {
     fn mul(self, rhs: Self) -> Self::Output {
         match (self, rhs) {
             (Self::Int(v1), Self::Int(v2)) => Self::Int(v1 * v2),
-            (Self::BigInt(v1), Self::Int(v2)) => {
-                Self::BigInt(v1 * BigInt::from(v2))
-            }
-            (Self::Int(v1), Self::BigInt(v2)) => {
-                Self::BigInt(v2 * BigInt::from(v1))
-            }
+            (Self::BigInt(v1), Self::Int(v2)) => Self::BigInt(v1 * BigInt::from(v2)),
+            (Self::Int(v1), Self::BigInt(v2)) => Self::BigInt(v2 * BigInt::from(v1)),
             (Self::BigInt(v1), Self::BigInt(v2)) => Self::BigInt(v1 * v2),
             (Self::Int(v1), Self::Float(v2)) => Self::Float((v1 as f64) * v2),
             (Self::Float(v1), Self::Int(v2)) => Self::Float(v1 * (v2 as f64)),
-            (Self::Int(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(BigFloat::from_i128(v1) * v2)
-            }
-            (Self::BigFloat(v1), Self::Int(v2)) => {
-                Self::BigFloat(v1 * BigFloat::from_i128(v2))
-            }
+            (Self::Int(v1), Self::BigFloat(v2)) => Self::BigFloat(BigFloat::from_i128(v1) * v2),
+            (Self::BigFloat(v1), Self::Int(v2)) => Self::BigFloat(v1 * BigFloat::from_i128(v2)),
             (Self::Float(v1), Self::Float(v2)) => Self::Float(v1 * v2),
-            (Self::Float(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(BigFloat::from_f64(v1) * v2)
-            }
-            (Self::BigFloat(v1), Self::Float(v2)) => {
-                Self::BigFloat(v1 * BigFloat::from_f64(v2))
-            }
+            (Self::Float(v1), Self::BigFloat(v2)) => Self::BigFloat(BigFloat::from_f64(v1) * v2),
+            (Self::BigFloat(v1), Self::Float(v2)) => Self::BigFloat(v1 * BigFloat::from_f64(v2)),
             (Self::Float(v1), Self::BigInt(v2)) => {
                 Self::BigFloat(BigFloat::from_f64(v1) * bigint_to_bigfloat(&v2))
             }
             (Self::BigInt(v1), Self::Float(v2)) => {
                 Self::BigFloat(bigint_to_bigfloat(&v1) * BigFloat::from_f64(v2))
             }
-            (Self::BigInt(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(bigint_to_bigfloat(&v1) * v2)
-            }
-            (Self::BigFloat(v1), Self::BigInt(v2)) => {
-                Self::BigFloat(v1 * bigint_to_bigfloat(&v2))
-            }
+            (Self::BigInt(v1), Self::BigFloat(v2)) => Self::BigFloat(bigint_to_bigfloat(&v1) * v2),
+            (Self::BigFloat(v1), Self::BigInt(v2)) => Self::BigFloat(v1 * bigint_to_bigfloat(&v2)),
             (Self::BigFloat(v1), Self::BigFloat(v2)) => Self::BigFloat(v1 * v2),
         }
     }
@@ -302,9 +262,7 @@ impl core::ops::Div for Number {
                 if !bv2.is_zero() && (&v1 % &bv2).is_zero() {
                     Self::maybe_narrow_bigint(v1 / bv2)
                 } else {
-                    Self::BigFloat(
-                        bigint_to_bigfloat(&v1) / BigFloat::from_i128(v2),
-                    )
+                    Self::BigFloat(bigint_to_bigfloat(&v1) / BigFloat::from_i128(v2))
                 }
             }
             (Self::Int(v1), Self::BigInt(v2)) => {
@@ -312,47 +270,31 @@ impl core::ops::Div for Number {
                 if !v2.is_zero() && (&bv1 % &v2).is_zero() {
                     Self::maybe_narrow_bigint(bv1 / v2)
                 } else {
-                    Self::BigFloat(
-                        BigFloat::from_i128(v1) / bigint_to_bigfloat(&v2),
-                    )
+                    Self::BigFloat(BigFloat::from_i128(v1) / bigint_to_bigfloat(&v2))
                 }
             }
             (Self::BigInt(v1), Self::BigInt(v2)) => {
                 if !v2.is_zero() && (&v1 % &v2).is_zero() {
                     Self::maybe_narrow_bigint(v1 / v2)
                 } else {
-                    Self::BigFloat(
-                        bigint_to_bigfloat(&v1) / bigint_to_bigfloat(&v2),
-                    )
+                    Self::BigFloat(bigint_to_bigfloat(&v1) / bigint_to_bigfloat(&v2))
                 }
             }
             (Self::Int(v1), Self::Float(v2)) => Self::Float((v1 as f64) / v2),
             (Self::Float(v1), Self::Int(v2)) => Self::Float(v1 / (v2 as f64)),
-            (Self::Int(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(BigFloat::from_i128(v1) / v2)
-            }
-            (Self::BigFloat(v1), Self::Int(v2)) => {
-                Self::BigFloat(v1 / BigFloat::from_i128(v2))
-            }
+            (Self::Int(v1), Self::BigFloat(v2)) => Self::BigFloat(BigFloat::from_i128(v1) / v2),
+            (Self::BigFloat(v1), Self::Int(v2)) => Self::BigFloat(v1 / BigFloat::from_i128(v2)),
             (Self::Float(v1), Self::Float(v2)) => Self::Float(v1 / v2),
-            (Self::Float(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(BigFloat::from_f64(v1) / v2)
-            }
-            (Self::BigFloat(v1), Self::Float(v2)) => {
-                Self::BigFloat(v1 / BigFloat::from_f64(v2))
-            }
+            (Self::Float(v1), Self::BigFloat(v2)) => Self::BigFloat(BigFloat::from_f64(v1) / v2),
+            (Self::BigFloat(v1), Self::Float(v2)) => Self::BigFloat(v1 / BigFloat::from_f64(v2)),
             (Self::Float(v1), Self::BigInt(v2)) => {
                 Self::BigFloat(BigFloat::from_f64(v1) / bigint_to_bigfloat(&v2))
             }
             (Self::BigInt(v1), Self::Float(v2)) => {
                 Self::BigFloat(bigint_to_bigfloat(&v1) / BigFloat::from_f64(v2))
             }
-            (Self::BigInt(v1), Self::BigFloat(v2)) => {
-                Self::BigFloat(bigint_to_bigfloat(&v1) / v2)
-            }
-            (Self::BigFloat(v1), Self::BigInt(v2)) => {
-                Self::BigFloat(v1 / bigint_to_bigfloat(&v2))
-            }
+            (Self::BigInt(v1), Self::BigFloat(v2)) => Self::BigFloat(bigint_to_bigfloat(&v1) / v2),
+            (Self::BigFloat(v1), Self::BigInt(v2)) => Self::BigFloat(v1 / bigint_to_bigfloat(&v2)),
             (Self::BigFloat(v1), Self::BigFloat(v2)) => Self::BigFloat(v1 / v2),
         }
     }
@@ -363,15 +305,9 @@ impl core::ops::Rem for Number {
     fn rem(self, rhs: Self) -> Self::Output {
         match (self, rhs) {
             (Self::Int(v1), Self::Int(v2)) => Self::Int(v1 % v2),
-            (Self::BigInt(v1), Self::Int(v2)) => {
-                Self::maybe_narrow_bigint(v1 % BigInt::from(v2))
-            }
-            (Self::Int(v1), Self::BigInt(v2)) => {
-                Self::maybe_narrow_bigint(BigInt::from(v1) % v2)
-            }
-            (Self::BigInt(v1), Self::BigInt(v2)) => {
-                Self::maybe_narrow_bigint(v1 % v2)
-            }
+            (Self::BigInt(v1), Self::Int(v2)) => Self::maybe_narrow_bigint(v1 % BigInt::from(v2)),
+            (Self::Int(v1), Self::BigInt(v2)) => Self::maybe_narrow_bigint(BigInt::from(v1) % v2),
+            (Self::BigInt(v1), Self::BigInt(v2)) => Self::maybe_narrow_bigint(v1 % v2),
             (Self::Int(v1), Self::Float(v2)) => Self::Float((v1 as f64) % v2),
             (Self::Float(v1), Self::Int(v2)) => Self::Float(v1 % (v2 as f64)),
             (Self::Int(v1), Self::BigFloat(v2)) => {
@@ -387,21 +323,19 @@ impl core::ops::Rem for Number {
             (Self::BigFloat(v1), Self::Float(v2)) => {
                 Self::maybe_narrow_bigfloat(v1 % BigFloat::from_f64(v2))
             }
-            (Self::Float(v1), Self::BigInt(v2)) => Self::maybe_narrow_bigfloat(
-                BigFloat::from_f64(v1) % bigint_to_bigfloat(&v2),
-            ),
-            (Self::BigInt(v1), Self::Float(v2)) => Self::maybe_narrow_bigfloat(
-                bigint_to_bigfloat(&v1) % BigFloat::from_f64(v2),
-            ),
+            (Self::Float(v1), Self::BigInt(v2)) => {
+                Self::maybe_narrow_bigfloat(BigFloat::from_f64(v1) % bigint_to_bigfloat(&v2))
+            }
+            (Self::BigInt(v1), Self::Float(v2)) => {
+                Self::maybe_narrow_bigfloat(bigint_to_bigfloat(&v1) % BigFloat::from_f64(v2))
+            }
             (Self::BigInt(v1), Self::BigFloat(v2)) => {
                 Self::maybe_narrow_bigfloat(bigint_to_bigfloat(&v1) % v2)
             }
             (Self::BigFloat(v1), Self::BigInt(v2)) => {
                 Self::maybe_narrow_bigfloat(v1 % bigint_to_bigfloat(&v2))
             }
-            (Self::BigFloat(v1), Self::BigFloat(v2)) => {
-                Self::maybe_narrow_bigfloat(v1 % v2)
-            }
+            (Self::BigFloat(v1), Self::BigFloat(v2)) => Self::maybe_narrow_bigfloat(v1 % v2),
         }
     }
 }
@@ -492,13 +426,9 @@ impl Number {
     #[must_use]
     pub fn sqrt(self) -> Self {
         match self {
-            Self::Int(v) => {
-                Self::maybe_narrow_bigfloat(BigFloat::from_i128(v).sqrt())
-            }
+            Self::Int(v) => Self::maybe_narrow_bigfloat(BigFloat::from_i128(v).sqrt()),
             Self::Float(v) => Self::Float(v.sqrt()),
-            Self::BigInt(v) => {
-                Self::maybe_narrow_bigfloat(bigint_to_bigfloat(&v).sqrt())
-            }
+            Self::BigInt(v) => Self::maybe_narrow_bigfloat(bigint_to_bigfloat(&v).sqrt()),
             Self::BigFloat(v) => Self::maybe_narrow_bigfloat(v.sqrt()),
         }
     }
@@ -545,11 +475,8 @@ impl Number {
                     Self::Int(v) => Self::Int(v),
                     Self::Float(v) => Self::Int(v.floor() as i128),
                     Self::BigFloat(v) => Self::maybe_narrow_bigint(
-                        BigInt::parse_bytes(
-                            v.floor().to_string().as_bytes(),
-                            10,
-                        )
-                        .unwrap_or_default(),
+                        BigInt::parse_bytes(v.floor().to_string().as_bytes(), 10)
+                            .unwrap_or_default(),
                     ),
                     other @ Self::BigInt(_) => other,
                 }
@@ -579,12 +506,11 @@ impl std::hash::Hash for Number {
         }
     }
 }
-
-fn bigint_to_bigfloat(n: &num_bigint::BigInt) -> num_bigfloat::BigFloat {
+#[must_use]
+/// Convert a bigint into a bigfloat
+pub fn bigint_to_bigfloat(n: &num_bigint::BigInt) -> num_bigfloat::BigFloat {
     // Safety: This should always be safe as float supports int
-    unsafe {
-        num_bigfloat::BigFloat::from_str(&n.to_string()).unwrap_unchecked()
-    }
+    unsafe { num_bigfloat::BigFloat::from_str(&n.to_string()).unwrap_unchecked() }
 }
 
 // TODO: Remove this potential UB and implement Ord manually for Value
@@ -594,17 +520,13 @@ impl PartialOrd for Number {
         Some(self.cmp(other))
     }
 }
-
+use mirl_extensions_core::SignToOrdering;
 impl Ord for Number {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         match (self, other) {
             (Self::Int(v1), Self::Int(v2)) => v1.cmp(v2),
-            (Self::BigInt(v1), Self::Int(v2)) => {
-                v1.cmp(&num_bigint::BigInt::from(*v2))
-            }
-            (Self::Int(v1), Self::BigInt(v2)) => {
-                num_bigint::BigInt::from(*v1).cmp(v2)
-            }
+            (Self::BigInt(v1), Self::Int(v2)) => v1.cmp(&num_bigint::BigInt::from(*v2)),
+            (Self::Int(v1), Self::BigInt(v2)) => num_bigint::BigInt::from(*v1).cmp(v2),
             (Self::BigInt(v1), Self::BigInt(v2)) => v1.cmp(v2),
             (Self::Int(v1), Self::Float(v2)) => (*v1 as f64)
                 .partial_cmp(v2)
@@ -616,55 +538,56 @@ impl Ord for Number {
                 // Safety: cmp on [`BigFloat`](num_bigfloat::BigFloat) returns -1, 0, or 1 which are all in range of an i8
                 num_bigfloat::BigFloat::from_i128(*v1)
                     .cmp(v2)
-                    .map_or(std::cmp::Ordering::Equal, sign_to_ordering)
+                    .map_or(std::cmp::Ordering::Equal, |x| {
+                        SignToOrdering::sign_to_ordering(&x)
+                    })
             }
             (Self::BigFloat(v1), Self::Int(v2)) => {
                 // Safety: cmp on [`BigFloat`](num_bigfloat::BigFloat) returns -1, 0, or 1 which are all in range of an i8
                 v1.cmp(&num_bigfloat::BigFloat::from_i128(*v2))
-                    .map_or(std::cmp::Ordering::Equal, sign_to_ordering)
+                    .map_or(std::cmp::Ordering::Equal, |x| {
+                        SignToOrdering::sign_to_ordering(&x)
+                    })
             }
             (Self::Float(v1), Self::Float(v2)) => {
                 v1.partial_cmp(v2).unwrap_or(std::cmp::Ordering::Equal)
             }
-            (Self::Float(v1), Self::BigFloat(v2)) => {
-                num_bigfloat::BigFloat::from_f64(*v1)
-                    .cmp(v2)
-                    .map_or(std::cmp::Ordering::Equal, sign_to_ordering)
-            }
-            (Self::Float(v1), Self::BigInt(v2)) => {
-                num_bigfloat::BigFloat::from_f64(*v1)
-                    .cmp(&bigint_to_bigfloat(v2))
-                    .map_or(std::cmp::Ordering::Equal, sign_to_ordering)
-            }
+            (Self::Float(v1), Self::BigFloat(v2)) => num_bigfloat::BigFloat::from_f64(*v1)
+                .cmp(v2)
+                .map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                }),
+            (Self::Float(v1), Self::BigInt(v2)) => num_bigfloat::BigFloat::from_f64(*v1)
+                .cmp(&bigint_to_bigfloat(v2))
+                .map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                }),
             (Self::BigInt(v1), Self::Float(v2)) => bigint_to_bigfloat(v1)
                 .cmp(&num_bigfloat::BigFloat::from_f64(*v2))
-                .map_or(std::cmp::Ordering::Equal, sign_to_ordering),
+                .map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                }),
             (Self::BigInt(v1), Self::BigFloat(v2)) => bigint_to_bigfloat(v1)
                 .cmp(v2)
-                .map_or(std::cmp::Ordering::Equal, sign_to_ordering),
+                .map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                }),
             (Self::BigFloat(v1), Self::Float(v2)) => v1
                 .cmp(&num_bigfloat::BigFloat::from_f64(*v2))
-                .map_or(std::cmp::Ordering::Equal, sign_to_ordering),
+                .map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                }),
             (Self::BigFloat(v1), Self::BigInt(v2)) => v1
                 .cmp(&bigint_to_bigfloat(v2))
-                .map_or(std::cmp::Ordering::Equal, sign_to_ordering),
+                .map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                }),
             (Self::BigFloat(v1), Self::BigFloat(v2)) => {
-                v1.cmp(v2).map_or(std::cmp::Ordering::Equal, sign_to_ordering)
+                v1.cmp(v2).map_or(std::cmp::Ordering::Equal, |x| {
+                    SignToOrdering::sign_to_ordering(&x)
+                })
             }
         }
-    }
-}
-
-const fn sign_to_ordering(value: i16) -> core::cmp::Ordering {
-    use core::cmp::Ordering;
-    if value < 0 {
-        Ordering::Less
-    } else if value == 0 {
-        Ordering::Equal
-    } else if value > 0 {
-        Ordering::Greater
-    } else {
-        unsafe { unreachable_unchecked() }
     }
 }
 

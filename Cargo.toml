@@ -21,8 +21,8 @@ num-bigint = "0.4.2"
 num-bigfloat = "1.7"
 num-traits = "0.2.19"
 
-# Settings
-indexmap = { version = "1.0", optional = true }
+# # Settings
+# indexmap = { version = "1.0", optional = true }
 
 # Support
 toml = { version = "1.1", optional = true }
