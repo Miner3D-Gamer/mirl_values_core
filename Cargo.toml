@@ -8,7 +8,6 @@ authors.workspace = true
 
 [features]
 all = ["all_codecs", "all_enum_extensions", "toml"]
-
 # Does nothing by itself. Needs another codec or enum flag to do something
 mirl_derive = ["dep:mirl_derive"]
 # Compatibility with ffi
@@ -17,18 +16,15 @@ c_compatible = ["mirl_derive"]
 all_codecs = ["serde", "bitcode", "wincode", "compactly", "zerocopy"]
 # All enum extensions
 all_enum_extensions = ["strum", "enum_ext"]
-
 # Codec stuff
 serde = ["dep:serde", "mirl_derive", "mirl_collections/serde"]
 bitcode = ["dep:bitcode", "mirl_derive", "mirl_collections/bitcode"]
 wincode = ["dep:wincode", "mirl_derive", "mirl_collections/wincode"]
 compactly = ["dep:compactly", "mirl_derive", "mirl_collections/compactly"]
 zerocopy = ["dep:zerocopy", "mirl_derive", "mirl_collections/zerocopy"]
-
 # Enum extensions
 strum = ["dep:strum", "mirl_derive"]
 enum_ext = ["dep:enum_ext", "mirl_derive"]
-
 # preserve_entries = ["dep:mirl_collections"]
 _checking = ["all"]
 # Support
@@ -43,30 +39,24 @@ compactly = { version = "0.1", optional = true }
 enum_ext = { version = "0.6", optional = true, default-features = false }
 mirl_collections = { version = "0.0.0-alpha" }
 # lightningcss = { version = "1.0-alpha.71", optional = true }
-
 mirl_derive = { version = "0.0.0-alpha", optional = true }
 # mirl_extensions = { version = "0.0.0-alpha", features = ["bigint", "bigfloat"] }
-
 mirl_extensions_core = { version = "0.0.0-alpha", features = [
     "bigint",
     "bigfloat",
 ] }
 num-bigfloat = "1.7"
-
 # For the "dynamic" numbers
 num-bigint = "0.5"
 num-traits = "0.2.19"
-serde = { version = "1", optional = true, default-features = false, features = [
+serde = { version = "1.0", optional = true, default-features = false, features = [
     "derive",
 ] }
-
 # Enum functionality
 strum = { version = "0.28", optional = true, default-features = false, features = [
     "derive",
 ] }
-# # Settings
-# indexmap = { version = "1.0", optional = true }
-
+# # Settings# indexmap = { version = "1.0", optional = true }
 # Support
 toml = { version = "1.1", optional = true }
 wincode = { version = "0.5", optional = true, features = [
