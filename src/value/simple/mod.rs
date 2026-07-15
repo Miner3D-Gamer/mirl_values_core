@@ -106,9 +106,7 @@ impl Ord for SimpleValue {
                 ord => ord,
             },
             (Self::Literal(l1), Self::Literal(l2)) => l1.cmp(l2),
-            (Self::Length(val1, t1), Self::Length(val2, t2)) => {
-                (val1, t1).cmp(&(val2, t2))
-            }
+            (Self::Length(val1, t1), Self::Length(val2, t2)) => (val1, t1).cmp(&(val2, t2)),
             (Self::Color(c), Self::Color(c2)) => c.cmp(c2),
             (Self::Bytes(a, b), Self::Bytes(c, d)) => match a.cmp(c) {
                 std::cmp::Ordering::Equal => b.cmp(d),

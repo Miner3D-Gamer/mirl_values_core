@@ -1,4 +1,3 @@
-
 #[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 /// The type of an angle

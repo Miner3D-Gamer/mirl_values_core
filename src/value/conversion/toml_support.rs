@@ -26,9 +26,7 @@ impl From<toml::value::Datetime> for Datetime {
             time: value.time.map(Into::into),
             minute_offset: value.offset.map_or(0, |x| match x {
                 toml::value::Offset::Z => 0,
-                toml::value::Offset::Custom {
-                    minutes,
-                } => minutes,
+                toml::value::Offset::Custom { minutes } => minutes,
             }),
         }
     }

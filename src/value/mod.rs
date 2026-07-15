@@ -12,7 +12,6 @@ mod conversion;
 
 // ── ValueType ────────────────────────────────────────────────────────────────
 
-
 #[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
 /// Empty value types that do not hold any data

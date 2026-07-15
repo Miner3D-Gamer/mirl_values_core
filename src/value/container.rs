@@ -45,9 +45,7 @@ impl<Value: Eq + PartialEq> PartialEq for ContainerValue<Value> {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Self::Vec(items1), Self::Vec(items2)) => items1.eq(items2),
-            (Self::Map(index_map1), Self::Map(index_map2)) => {
-                index_map1.eq(index_map2)
-            }
+            (Self::Map(index_map1), Self::Map(index_map2)) => index_map1.eq(index_map2),
             _ => false,
         }
     }
