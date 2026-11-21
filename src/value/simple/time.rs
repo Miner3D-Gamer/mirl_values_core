@@ -1,6 +1,5 @@
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
+#[mirl_macros::derive_all]
 /// The dd/mm/yyyy
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Date {
     /// Year
     pub year: u16,
@@ -10,9 +9,8 @@ pub struct Date {
     pub day: u8,
 }
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
+#[mirl_macros::derive_all(zerocopy = false)]
 /// A specific point in time (optionally offset by timezone)
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Datetime {
     /// [`Date`]
     pub date: Option<Date>,
@@ -25,8 +23,7 @@ pub struct Datetime {
     pub minute_offset: i16,
 }
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[mirl_macros::derive_all(zerocopy = false)]
 /// Time that is less that 24 hours
 pub struct Time {
     /// Hour: 0 to 23

@@ -1,4 +1,12 @@
 //! The core lib of `mirl_values`, this only defines the raw data types
+#![feature(const_clone)]
+#![feature(const_cmp)]
+#![feature(derive_const)]
+#![feature(const_default)]
+#![feature(const_trait_impl)]
+
+#[cfg(not(feature = "std"))]
+compile_error!("This lib must have std enabled");
 
 /// The core Simple and Container values
 pub mod value;

@@ -1,5 +1,4 @@
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[mirl_macros::derive_all(zerocopy = false)]
 /// A color
 pub enum Color {
     /// R G B support

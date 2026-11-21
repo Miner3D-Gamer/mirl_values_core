@@ -1,12 +1,16 @@
 [package]
 name = "mirl_values_core"
 version = "0.0.0-alpha"
-edition.workspace = true
-repository.workspace = true
+edition = "2024"
+repository = "https://github.com/Miner3D-Gamer/mirl_values_core"
 license.workspace = true
 authors.workspace = true
+rust-version.workspace = true
+maintenance.workspace = true
 
 [features]
+default = ["std"]
+std = []
 all = [
     "all_codecs",
     "all_enum_extensions",
@@ -14,11 +18,8 @@ all = [
     "mirl_collections/all",
     "mirl_extensions_core/all",
 ]
-# Does nothing by itself. Needs another codec or enum flag to do something
-mirl_derive = ["dep:mirl_derive", "mirl_collections/mirl_derive"]
 # Compatibility with ffi
 c_compatible = [
-    "mirl_derive",
     "mirl_collections/c_compatible",
     "mirl_extensions_core/c_compatible",
 ]
@@ -31,25 +32,34 @@ all_codecs = [
     "zerocopy",
     "mirl_collections/all_codecs",
 ]
+all_misc_integrations = ["rkyv", "get_size2", "bevy_reflect"]
 # All enum extensions
-all_enum_extensions = ["strum", "enum_ext", "mirl_collections/all_enum_extensions"]
+all_enum_extensions = [
+    "strum",
+    "enum_ext",
+    "mirl_collections/all_enum_extensions",
+]
 # Codec stuff
 serde = [
     "dep:serde",
-    "mirl_derive",
     "mirl_collections/serde",
     "bitcode?/serde",
     "num-bigfloat/serde",
     "num-bigint/serde",
     "toml?/serde",
 ]
-bitcode = ["dep:bitcode", "mirl_derive", "mirl_collections/bitcode"]
-wincode = ["dep:wincode", "mirl_derive", "mirl_collections/wincode"]
-compactly = ["dep:compactly", "mirl_derive", "mirl_collections/compactly"]
-zerocopy = ["dep:zerocopy", "mirl_derive", "mirl_collections/zerocopy"]
+bitcode = ["dep:bitcode", "mirl_collections/bitcode"]
+wincode = ["dep:wincode", "mirl_collections/wincode"]
+compactly = ["dep:compactly", "mirl_collections/compactly"]
+zerocopy = ["dep:zerocopy", "mirl_collections/zerocopy"]
 # Enum extensions
-strum = ["dep:strum", "mirl_derive", "mirl_collections/strum"]
-enum_ext = ["dep:enum_ext", "mirl_derive", "mirl_collections/enum_ext"]
+strum = ["dep:strum", "mirl_collections/strum"]
+enum_ext = ["dep:enum_ext", "mirl_collections/enum_ext"]
+enum_ordinalize = ["dep:enum-ordinalize"]
+rkyv = ["dep:rkyv"]
+parity_scale_codec = ["dep:parity-scale-codec"]
+get_size2 = ["dep:get-size2"]
+bevy_reflect = ["dep:bevy_reflect"]
 # preserve_entries = ["dep:mirl_collections"]
 _checking = ["all"]
 # Support
@@ -60,20 +70,23 @@ bitcode = { version = "0.6", optional = true, default-features = false, features
     "derive",
 ] }
 # Codec
-compactly = { version = "0.1", optional = true }
+compactly = { version = "0.2", optional = true }
 enum_ext = { version = "0.6", optional = true, default-features = false }
 mirl_collections = { version = "0.0.0-alpha" }
 # lightningcss = { version = "1.0-alpha.71", optional = true }
-mirl_derive = { version = "0.0.0-alpha", optional = true }
+mirl_macros = { version = "0.0.0-alpha" }
 # mirl_extensions = { version = "0.0.0-alpha", features = ["bigint", "bigfloat"] }
 mirl_extensions_core = { version = "0.0.0-alpha", features = [
     "bigint",
     "bigfloat",
 ] }
-num-bigfloat = "1.7"
+num-bigfloat = { version = "1.7", default-features = false, features = [
+    "std",
+    "num-traits",
+] }
 # For the "dynamic" numbers
 num-bigint = "0.5"
-num-traits = "0.2.19"
+num-traits = { version = "0.2.19" }
 serde = { version = "1.0", optional = true, default-features = false, features = [
     "derive",
 ] }
@@ -84,14 +97,20 @@ strum = { version = "0.28", optional = true, default-features = false, features 
 # # Settings# indexmap = { version = "1.0", optional = true }
 # Support
 toml = { version = "1.1", optional = true }
-wincode = { version = "0.5", optional = true, features = ["derive"] }
+wincode = { version = "0.6", optional = true, features = ["derive"] }
 zerocopy = { version = "0.8", optional = true, default-features = false, features = [
     "float-nightly",
     "derive",
 ] }
+enum-ordinalize = { version = "4.4.2", optional = true }
+rkyv = { version = "0.8", optional = true }
+parity-scale-codec = { version = "3.7", optional = true, features = ["derive"] }
+get-size2 = { version = "0.11", optional = true, features = ["derive"] }
+bevy_reflect = { version = "0.20", optional = true }
+
 # css = ["dep:lightningcss"]
 [build-dependencies]
-mirl_build_tools = { workspace = true }
+mirl_build_tools = { version = "0.0.0-alpha" }
 
 [lints]
 workspace = true

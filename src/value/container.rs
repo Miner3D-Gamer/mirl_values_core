@@ -1,8 +1,19 @@
 use crate::{settings::MapType, value::ValueType};
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
+// #[cfg(IS_NIGHTLY)]
+// mod hi {
+//     compile_error!("HERE");
+// }
+
+#[mirl_macros::derive_all(
+    zerocopy = false,
+    copy = false,
+    partial_eq = false,
+    partial_ord = false,
+    hash = false,clone=nonconst,get_size2=false
+)]
 /// Container variants that hold inner values of type `V`
-#[derive(Debug, Clone)]
+// #[derive(Debug, Clone)]
 pub enum ContainerValue<Value> {
     /// List
     Vec(Vec<Value>),

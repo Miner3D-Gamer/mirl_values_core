@@ -12,8 +12,7 @@ mod conversion;
 
 // ── ValueType ────────────────────────────────────────────────────────────────
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Default)]
+#[mirl_macros::derive_all(default = true)]
 /// Empty value types that do not hold any data
 pub enum ValueType {
     /// Refer to [`SimpleValue::None`]

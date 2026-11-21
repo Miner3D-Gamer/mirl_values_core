@@ -1,5 +1,4 @@
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[mirl_macros::derive_all]
 /// The type of an angle
 pub enum AngleType {
     /// Full rotation 360
@@ -12,8 +11,7 @@ pub enum AngleType {
     Turns,
 }
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all(zerocopy = false))]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[mirl_macros::derive_all(zerocopy = false)]
 /// The length of 1d object
 pub enum LengthType {
     /// Measure in nanometers
@@ -24,8 +22,7 @@ pub enum LengthType {
     Relative(RelativeLengthType),
 }
 
-#[cfg_attr(feature = "mirl_derive", mirl_derive::derive_all)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[mirl_macros::derive_all]
 /// Unit relative to context (css)
 pub enum RelativeLengthType {
     /// em
